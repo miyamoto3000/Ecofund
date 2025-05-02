@@ -1,0 +1,470 @@
+[
+    {
+      "title": "Project Tiger Conservation Grant",
+      "description": "Funding to support tiger conservation in national parks, focusing on habitat restoration and anti-poaching.",
+      "amount": 5000000,
+      "eligibility": "Registered NGOs and state forest departments with tiger reserves.",
+      "deadline": "2025-06-30",
+      "source": "Ministry of Environment, Forest and Climate Change",
+      "applyLink": "https://moef.gov.in/apply/grant-project-tiger-conservation"
+    },
+    {
+      "title": "Project Elephant Habitat Protection Grant",
+      "description": "Grant to protect elephant corridors and reduce human-elephant conflicts.",
+      "amount": 3000000,
+      "eligibility": "State wildlife departments and conservation NGOs in elephant-prone regions.",
+      "deadline": "2025-07-15",
+      "source": "Ministry of Environment, Forest and Climate Change",
+      "applyLink": "https://moef.gov.in/apply/grant-project-elephant-habitat"
+    },
+    {
+      "title": "Snow Leopard Conservation Fund",
+      "description": "Funding to preserve snow leopard habitats in the Himalayas.",
+      "amount": 2500000,
+      "eligibility": "NGOs and research institutions in Himalayan states.",
+      "deadline": "2025-08-01",
+      "source": "Project Snow Leopard Initiative",
+      "applyLink": "https://projectsnowleopard.in/apply/grant-snow-leopard"
+    },
+    {
+      "title": "Ganges River Dolphin Preservation Grant",
+      "description": "Support for protecting Ganges River Dolphins through habitat restoration.",
+      "amount": 2000000,
+      "eligibility": "Environmental NGOs in Uttar Pradesh and Bihar.",
+      "deadline": "2025-09-10",
+      "source": "Ministry of Environment, Forest and Climate Change",
+      "applyLink": "https://moef.gov.in/apply/grant-ganges-dolphin"
+    },
+    {
+      "title": "Hangul Recovery Program Grant",
+      "description": "Funding to recover the Kashmir stag population in Dachigam National Park.",
+      "amount": 1500000,
+      "eligibility": "Jammu & Kashmir wildlife authorities and NGOs.",
+      "deadline": "2025-10-01",
+      "source": "Government of Jammu & Kashmir",
+      "applyLink": "https://jkforest.gov.in/apply/grant-hangul-recovery"
+    },
+    {
+      "title": "Vulture Conservation Initiative Grant",
+      "description": "Grant to protect vulture populations through breeding and habitat management.",
+      "amount": 1200000,
+      "eligibility": "NGOs in Punjab, Haryana, and Gujarat.",
+      "deadline": "2025-11-15",
+      "source": "Bombay Natural History Society",
+      "applyLink": "https://bnhs.org/apply/grant-vulture-conservation"
+    },
+    {
+      "title": "Indian Rhino Vision 2020 Extension Grant",
+      "description": "Funding to continue conservation of the greater one-horned rhinoceros in Assam.",
+      "amount": 4000000,
+      "eligibility": "Assam Forest Department and NGOs.",
+      "deadline": "2025-12-01",
+      "source": "Department of Environment and Forests, Assam",
+      "applyLink": "https://assamforest.gov.in/apply/grant-rhino-vision"
+    },
+    {
+      "title": "Olive Ridley Turtle Protection Grant",
+      "description": "Support for protecting Olive Ridley turtles along the Odisha coast.",
+      "amount": 1800000,
+      "eligibility": "Coastal NGOs and fishing cooperatives.",
+      "deadline": "2025-06-20",
+      "source": "Wildlife Institute of India",
+      "applyLink": "https://wii.gov.in/apply/grant-olive-ridley"
+    },
+    {
+      "title": "Sundarbans Tiger Reserve Grant",
+      "description": "Funding to enhance conservation in the Sundarbans for tigers and biodiversity.",
+      "amount": 3500000,
+      "eligibility": "West Bengal Forest Department and NGOs.",
+      "deadline": "2025-07-25",
+      "source": "Ministry of Environment, Forest and Climate Change",
+      "applyLink": "https://moef.gov.in/apply/grant-sundarbans-tiger"
+    },
+    {
+      "title": "National River Conservation Plan Grant",
+      "description": "Grant to prevent river pollution and protect aquatic wildlife.",
+      "amount": 4500000,
+      "eligibility": "State governments and environmental agencies.",
+      "deadline": "2025-08-15",
+      "source": "Ministry of Environment, Forest and Climate Change",
+      "applyLink": "https://moef.gov.in/apply/grant-nrcp"
+    },
+    {
+      "title": "Wildlife Habitat Development Grant",
+      "description": "Funding for developing wildlife habitats in national parks.",
+      "amount": 2800000,
+      "eligibility": "National park authorities and NGOs.",
+      "deadline": "2025-09-30",
+      "source": "Wildlife Protection Act 1972 Fund",
+      "applyLink": "https://wildlifeindia.org/apply/grant-habitat-dev"
+    },
+    {
+      "title": "Forest Restoration and Afforestation Grant",
+      "description": "Support for reforestation to protect forest animal habitats.",
+      "amount": 3200000,
+      "eligibility": "State forest departments and community organizations.",
+      "deadline": "2025-10-20",
+      "source": "Compensatory Afforestation Fund Management Authority",
+      "applyLink": "https://campa.gov.in/apply/grant-forest-restoration"
+    },
+    {
+      "title": "Sangai Deer Conservation Grant",
+      "description": "Funding to protect the endangered Sangai deer in Manipur.",
+      "amount": 1300000,
+      "eligibility": "Manipur Forest Department and NGOs.",
+      "deadline": "2025-11-10",
+      "source": "Government of Manipur",
+      "applyLink": "https://manipurforest.gov.in/apply/grant-sangai"
+    },
+    {
+      "title": "Nilgiri Tahr Recovery Grant",
+      "description": "Grant to recover Nilgiri Tahr populations in the Western Ghats.",
+      "amount": 1400000,
+      "eligibility": "Tamil Nadu Wildlife Department and NGOs.",
+      "deadline": "2025-12-15",
+      "source": "Tamil Nadu Forest Department",
+      "applyLink": "https://tnforest.gov.in/apply/grant-nilgiri-tahr"
+    },
+    {
+      "title": "Swiftlet Conservation Fund",
+      "description": "Support for protecting edible-nest swiftlets in Andaman & Nicobar.",
+      "amount": 1100000,
+      "eligibility": "Andaman & Nicobar Forest Department and institutes.",
+      "deadline": "2025-06-10",
+      "source": "Ministry of Environment, Forest and Climate Change",
+      "applyLink": "https://moef.gov.in/apply/grant-swiftlet"
+    },
+    {
+      "title": "Crocodile Conservation Project Grant",
+      "description": "Funding to conserve crocodile species in Indian rivers and wetlands.",
+      "amount": 1600000,
+      "eligibility": "Wildlife NGOs and state wetland authorities.",
+      "deadline": "2025-07-05",
+      "source": "Wildlife Institute of India",
+      "applyLink": "https://wii.gov.in/apply/grant-crocodile"
+    },
+    {
+      "title": "Bird Habitat Restoration Grant",
+      "description": "Grant to restore habitats for threatened bird species.",
+      "amount": 1700000,
+      "eligibility": "Ornithological societies and NGOs.",
+      "deadline": "2025-08-20",
+      "source": "Bombay Natural History Society",
+      "applyLink": "https://bnhs.org/apply/grant-bird-habitat"
+    },
+    {
+      "title": "Mangrove Ecosystem Protection Grant",
+      "description": "Funding to protect mangrove ecosystems supporting forest animals.",
+      "amount": 2900000,
+      "eligibility": "Coastal state governments and NGOs.",
+      "deadline": "2025-09-15",
+      "source": "Society of Integrated Coastal Management",
+      "applyLink": "https://sicm.gov.in/apply/grant-mangrove"
+    },
+    {
+      "title": "Leopard Habitat Enhancement Grant",
+      "description": "Support for enhancing leopard habitats and reducing conflicts.",
+      "amount": 2000000,
+      "eligibility": "State forest departments and NGOs.",
+      "deadline": "2025-10-30",
+      "source": "National Tiger Conservation Authority",
+      "applyLink": "https://ntca.gov.in/apply/grant-leopard-habitat"
+    },
+    {
+      "title": "Wetland Conservation Grant",
+      "description": "Funding to conserve wetlands for migratory birds and aquatic animals.",
+      "amount": 2600000,
+      "eligibility": "State wetland authorities and NGOs.",
+      "deadline": "2025-11-25",
+      "source": "National Plan for Conservation of Aquatic Eco-System",
+      "applyLink": "https://npc.gov.in/apply/grant-wetland"
+    },
+    {
+      "title": "Forest Fire Prevention Grant",
+      "description": "Grant to prevent forest fires and protect animal habitats.",
+      "amount": 2300000,
+      "eligibility": "Forest departments and community groups.",
+      "deadline": "2025-12-10",
+      "source": "Ministry of Environment, Forest and Climate Change",
+      "applyLink": "https://moef.gov.in/apply/grant-forest-fire"
+    },
+    {
+      "title": "Wildlife Corridor Development Grant",
+      "description": "Funding to develop wildlife corridors for forest animals.",
+      "amount": 2700000,
+      "eligibility": "State wildlife boards and NGOs.",
+      "deadline": "2025-06-25",
+      "source": "Wildlife Protection Act 1972 Fund",
+      "applyLink": "https://wildlifeindia.org/apply/grant-corridor"
+    },
+    {
+      "title": "Tiger Prey Base Enhancement Grant",
+      "description": "Support for enhancing prey populations for tiger conservation.",
+      "amount": 3100000,
+      "eligibility": "Tiger reserve authorities and institutes.",
+      "deadline": "2025-07-10",
+      "source": "Project Tiger Initiative",
+      "applyLink": "https://projecttiger.gov.in/apply/grant-prey-base"
+    },
+    {
+      "title": "Endangered Species Recovery Grant",
+      "description": "Funding to recover species like the Asiatic lion.",
+      "amount": 1900000,
+      "eligibility": "Gujarat Forest Department and NGOs.",
+      "deadline": "2025-08-05",
+      "source": "Ministry of Environment, Forest and Climate Change",
+      "applyLink": "https://moef.gov.in/apply/grant-endangered-recovery"
+    },
+    {
+      "title": "Aquatic Ecosystem Restoration Grant",
+      "description": "Grant to restore aquatic ecosystems for forest animals.",
+      "amount": 2400000,
+      "eligibility": "State fisheries departments and NGOs.",
+      "deadline": "2025-09-20",
+      "source": "National River Conservation Plan",
+      "applyLink": "https://nrcp.gov.in/apply/grant-aquatic"
+    },
+    {
+      "title": "Himalayan Biodiversity Grant",
+      "description": "Funding to protect biodiversity in Himalayan forests.",
+      "amount": 3000000,
+      "eligibility": "Himalayan state governments and NGOs.",
+      "deadline": "2025-10-15",
+      "source": "Project Snow Leopard",
+      "applyLink": "https://projectsnowleopard.in/apply/grant-himalayan"
+    },
+    {
+      "title": "Wildlife Anti-Poaching Grant",
+      "description": "Support for anti-poaching patrols in protected areas.",
+      "amount": 2200000,
+      "eligibility": "Wildlife Crime Control Bureau and police.",
+      "deadline": "2025-11-05",
+      "source": "Wildlife Crime Control Bureau",
+      "applyLink": "https://wccb.gov.in/apply/grant-anti-poaching"
+    },
+    {
+      "title": "Forest Community Engagement Grant",
+      "description": "Funding to engage communities in wildlife conservation.",
+      "amount": 1500000,
+      "eligibility": "Community-based NGOs and tribal councils.",
+      "deadline": "2025-12-20",
+      "source": "Ministry of Tribal Affairs",
+      "applyLink": "https://tribal.gov.in/apply/grant-community"
+    },
+    {
+      "title": "Lion Conservation Fund",
+      "description": "Grant to protect Asiatic lions in Gir Forest.",
+      "amount": 2100000,
+      "eligibility": "Gujarat Forest Department and NGOs.",
+      "deadline": "2025-06-15",
+      "source": "Government of Gujarat",
+      "applyLink": "https://gujaratforest.gov.in/apply/grant-lion"
+    },
+    {
+      "title": "Bird Migration Protection Grant",
+      "description": "Support for protecting migratory bird habitats.",
+      "amount": 1600000,
+      "eligibility": "Ornithological societies and wetland authorities.",
+      "deadline": "2025-07-30",
+      "source": "Convention on Migratory Species",
+      "applyLink": "https://cms.int/apply/grant-bird-migration"
+    },
+    {
+      "title": "Forest Research and Monitoring Grant",
+      "description": "Funding for research on forest animal populations.",
+      "amount": 1800000,
+      "eligibility": "Research institutions and universities.",
+      "deadline": "2025-08-25",
+      "source": "Indian Council of Forestry Research and Education",
+      "applyLink": "https://icfre.gov.in/apply/grant-research"
+    },
+    {
+      "title": "Wildlife Health Management Grant",
+      "description": "Grant to manage wildlife health and disease surveillance.",
+      "amount": 1700000,
+      "eligibility": "Veterinary NGOs and wildlife authorities.",
+      "deadline": "2025-09-10",
+      "source": "Wildlife Institute of India",
+      "applyLink": "https://wii.gov.in/apply/grant-health"
+    },
+    {
+      "title": "Coastal Forest Protection Grant",
+      "description": "Support for protecting coastal forests and wildlife.",
+      "amount": 2500000,
+      "eligibility": "Coastal state governments and NGOs.",
+      "deadline": "2025-10-05",
+      "source": "Society of Integrated Coastal Management",
+      "applyLink": "https://sicm.gov.in/apply/grant-coastal"
+    },
+    {
+      "title": "Tiger Reserve Infrastructure Grant",
+      "description": "Funding to improve infrastructure in tiger reserves.",
+      "amount": 3600000,
+      "eligibility": "Tiger reserve authorities and governments.",
+      "deadline": "2025-11-20",
+      "source": "National Tiger Conservation Authority",
+      "applyLink": "https://ntca.gov.in/apply/grant-infrastructure"
+    },
+    {
+      "title": "Forest Biodiversity Survey Grant",
+      "description": "Grant to conduct biodiversity surveys in forests.",
+      "amount": 2000000,
+      "eligibility": "Research institutions and forest departments.",
+      "deadline": "2025-12-05",
+      "source": "Forest Survey of India",
+      "applyLink": "https://fsi.nic.in/apply/grant-survey"
+    },
+    {
+      "title": "Wildlife Education and Awareness Grant",
+      "description": "Support for educating communities about conservation.",
+      "amount": 1400000,
+      "eligibility": "Educational NGOs and schools.",
+      "deadline": "2025-06-30",
+      "source": "CPR Environmental Education Centre",
+      "applyLink": "https://cpreec.org/apply/grant-education"
+    },
+    {
+      "title": "Elephant Task Force Grant",
+      "description": "Funding to reduce human-elephant conflict.",
+      "amount": 2300000,
+      "eligibility": "State wildlife departments and NGOs.",
+      "deadline": "2025-07-15",
+      "source": "Ministry of Environment, Forest and Climate Change",
+      "applyLink": "https://moef.gov.in/apply/grant-elephant-task"
+    },
+    {
+      "title": "Forest Carbon Sequestration Grant",
+      "description": "Support for forest projects that sequester carbon.",
+      "amount": 2800000,
+      "eligibility": "State forest departments and climate NGOs.",
+      "deadline": "2025-08-10",
+      "source": "National Afforestation Programme",
+      "applyLink": "https://nap.gov.in/apply/grant-carbon"
+    },
+    {
+      "title": "Wildlife Rescue and Rehabilitation Grant",
+      "description": "Funding to rescue and rehabilitate injured animals.",
+      "amount": 1300000,
+      "eligibility": "Wildlife rescue NGOs and veterinary services.",
+      "deadline": "2025-09-25",
+      "source": "Wildlife SOS",
+      "applyLink": "https://wildlifesos.org/apply/grant-rescue"
+    },
+    {
+      "title": "River Dolphin Monitoring Grant",
+      "description": "Grant to monitor and protect river dolphin populations.",
+      "amount": 1500000,
+      "eligibility": "Research institutes and river conservation groups.",
+      "deadline": "2025-10-20",
+      "source": "WWF-India",
+      "applyLink": "https://wwfindia.org/apply/grant-dolphin"
+    },
+    {
+      "title": "Forest Patrol and Surveillance Grant",
+      "description": "Support for patrolling to prevent poaching.",
+      "amount": 2100000,
+      "eligibility": "Forest guards and state police.",
+      "deadline": "2025-11-15",
+      "source": "Wildlife Crime Control Bureau",
+      "applyLink": "https://wccb.gov.in/apply/grant-patrol"
+    },
+    {
+      "title": "Endangered Bird Breeding Grant",
+      "description": "Funding to establish breeding programs for birds.",
+      "amount": 1600000,
+      "eligibility": "Zoos and ornithological societies.",
+      "deadline": "2025-12-10",
+      "source": "Central Zoo Authority",
+      "applyLink": "https://cza.nic.in/apply/grant-bird-breeding"
+    },
+    {
+      "title": "Forest Ecosystem Restoration Grant",
+      "description": "Grant to restore degraded forest ecosystems.",
+      "amount": 2700000,
+      "eligibility": "State forest departments and NGOs.",
+      "deadline": "2025-06-20",
+      "source": "National Biodiversity Action Plan",
+      "applyLink": "https://nbap.gov.in/apply/grant-ecosystem"
+    },
+    {
+      "title": "Wildlife Conflict Mitigation Grant",
+      "description": "Support to mitigate human-wildlife conflicts.",
+      "amount": 1900000,
+      "eligibility": "Community organizations and state governments.",
+      "deadline": "2025-07-25",
+      "source": "Ministry of Environment, Forest and Climate Change",
+      "applyLink": "https://moef.gov.in/apply/grant-conflict"
+    },
+    {
+      "title": "Tiger Population Census Grant",
+      "description": "Funding to conduct tiger population censuses.",
+      "amount": 2400000,
+      "eligibility": "Wildlife Institute of India and forest departments.",
+      "deadline": "2025-08-15",
+      "source": "National Tiger Conservation Authority",
+      "applyLink": "https://ntca.gov.in/apply/grant-census"
+    },
+    {
+      "title": "Forest Animal Health Grant",
+      "description": "Grant to improve health services for forest animals.",
+      "amount": 1700000,
+      "eligibility": "Veterinary NGOs and wildlife authorities.",
+      "deadline": "2025-09-30",
+      "source": "Animal Welfare Board of India",
+      "applyLink": "https://awbi.gov.in/apply/grant-health"
+    },
+    {
+      "title": "Coastal Wildlife Protection Grant",
+      "description": "Support for protecting wildlife in coastal forests.",
+      "amount": 2200000,
+      "eligibility": "Coastal NGOs and state governments.",
+      "deadline": "2025-10-10",
+      "source": "Society of Integrated Coastal Management",
+      "applyLink": "https://sicm.gov.in/apply/grant-coastal-wildlife"
+    },
+    {
+      "title": "Forest Species Reintroduction Grant",
+      "description": "Funding to reintroduce endangered species into forests.",
+      "amount": 3000000,
+      "eligibility": "Wildlife Institute of India and state departments.",
+      "deadline": "2025-11-20",
+      "source": "Project Cheetah Initiative",
+      "applyLink": "https://projectcheetah.in/apply/grant-reintroduction"
+    },
+    {
+      "title": "Wildlife Tourism Development Grant",
+      "description": "Support for sustainable wildlife tourism to fund conservation.",
+      "amount": 1800000,
+      "eligibility": "National park authorities and tourism NGOs.",
+      "deadline": "2025-12-05",
+      "source": "Ministry of Tourism",
+      "applyLink": "https://tourism.gov.in/apply/grant-wildlife-tourism"
+    },
+    {
+      "title": "Forest Water Conservation Grant",
+      "description": "Grant to conserve water sources in forest ecosystems.",
+      "amount": 2000000,
+      "eligibility": "State forest departments and water NGOs.",
+      "deadline": "2025-06-15",
+      "source": "National Water Policy",
+      "applyLink": "https://nwp.gov.in/apply/grant-water"
+    },
+    {
+      "title": "Bear Habitat Restoration Grant",
+      "description": "Funding to restore habitats for sloth bears in central India.",
+      "amount": 1400000,
+      "eligibility": "Madhya Pradesh Forest Department and NGOs.",
+      "deadline": "2025-07-20",
+      "source": "Wildlife Trust of India",
+      "applyLink": "https://wti.org.in/apply/grant-bear-habitat"
+    },
+    {
+      "title": "Deer Population Recovery Grant",
+      "description": "Support for recovering deer populations in northern forests.",
+      "amount": 1300000,
+      "eligibility": "Uttarakhand Forest Department and NGOs.",
+      "deadline": "2025-08-10",
+      "source": "WWF-India",
+      "applyLink": "https://wwfindia.org/apply/grant-deer-recovery"
+    }
+  ]
