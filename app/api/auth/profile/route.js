@@ -1,6 +1,7 @@
+import { NextResponse } from "next/server";
 import { authenticateUser } from "@/middlewares/authMiddleware";
 import NGO from "@/models/NGO";
-import Donor from "@/models/Donor";
+import Donor from "@/models/Donar";
 
 export async function GET(req) {
   await authenticateUser(req);

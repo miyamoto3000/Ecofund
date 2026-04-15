@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^6.12.1",
-    "@paypal/checkout-server-sdk": "^1.0.3",
     "@radix-ui/react-slot": "^1.1.2",
     "@stripe/react-stripe-js": "^3.3.0",
     "@stripe/stripe-js": "^5.10.0",

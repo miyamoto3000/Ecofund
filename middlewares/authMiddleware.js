@@ -15,9 +15,9 @@ export function middleware(req) {
         return NextResponse.redirect(new URL("/login", req.url));
     }
 
-    return NextResponse.next(); // Allow access if authenticated
+    return NextResponse.next(); 
 }
 
 export const config = {
-    matcher: ["/ngo-dashboard/:path*", "/donor-dashboard/:path*"], // ✅ Only protect dashboards
+    matcher: ["/ngo-dashboard/:path*", "/donor-dashboard/:path*"], //  Only protect dashboards
 };

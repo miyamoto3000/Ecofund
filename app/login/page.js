@@ -28,7 +28,6 @@ export default function LoginPage() {
             const data = await res.json();
 
             if (res.ok) {
-                document.cookie = `token=${data.token}; path=/; Secure; SameSite=Strict`;
                 router.push(role === "ngo" ? "/ngo-dashboard" : "/donor-dashboard");
             } else {
                 setError(data.error || "An error occurred. Please try again.");

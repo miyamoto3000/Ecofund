@@ -4,30 +4,12 @@ import dbConnect from "@/lib/db";
 import Donation from "@/models/Donation";
 import Donor from "@/models/Donar";
 import NGO from "@/models/NGO";
-const paypal = require('@paypal/checkout-server-sdk');
+import Razorpay from "razorpay";
 
-const environment = new paypal.core.SandboxEnvironment(
-  process.env.PAYPAL_CLIENT_ID,
-  process.env.PAYPAL_CLIENT_SECRET,
-  { timeout: 60000 }
-);
-const paypalClient = new paypal.core.PayPalHttpClient(environment);
-
-async function executePaypalRequest(request, retries = 2) {
-  for (let attempt = 1; attempt <= retries; attempt++) {
-    try {
-      const response = await paypalClient.execute(request);
-      return response;
-    } catch (error) {
-      if (attempt === retries || !error.message.includes('timeout')) {
-        console.error(`PayPal request failed on attempt ${attempt}: ${error.message}`);
-        throw new Error(`PayPal request failed: ${error.message}`);
-      }
-      console.warn(`Attempt ${attempt} failed, retrying... (${retries - attempt} retries left)`);
-      await new Promise(resolve => setTimeout(resolve, 2000 * attempt));
-    }
-  }
-}
+const razorpay = new Razorpay({
+  key_id: process.env.RAZORPAY_KEY_ID,
+  key_secret: process.env.RAZORPAY_KEY_SECRET,
+});
 
 export async function POST(req) {
   try {
@@ -50,7 +32,7 @@ export async function POST(req) {
     }
 
     const body = await req.json();
-    const { ngoId, amount, message, paymentMethod, autoComplete = false } = body;
+    const { ngoId, amount, message, paymentMethod, campaignId, autoComplete = false } = body;
 
     if (!ngoId || !amount || amount <= 0 || !paymentMethod) {
       return NextResponse.json(
@@ -64,63 +46,65 @@ export async function POST(req) {
       return NextResponse.json({ error: "NGO not found" }, { status: 404 });
     }
 
-    // Create donation record based on payment method
-    if (paymentMethod === "PayPal") {
-      if (!process.env.PAYPAL_CLIENT_ID || !process.env.PAYPAL_CLIENT_SECRET) {
-        console.error("PayPal credentials missing");
+    // Razorpay payment flow
+    if (paymentMethod === "Razorpay") {
+      if (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_KEY_SECRET) {
+        console.error("Razorpay credentials missing");
         return NextResponse.json(
-          { error: "Server configuration error", details: "PayPal credentials missing" },
+          { error: "Server configuration error", details: "Razorpay credentials missing" },
           { status: 500 }
         );
       }
 
-      const request = new paypal.orders.OrdersCreateRequest();
-      request.prefer("return=representation");
-      request.requestBody({
-        intent: "CAPTURE",
-        purchase_units: [{
-          amount: {
-            currency_code: "INR",
-            value: amount.toString(),
-          },
-          description: `Donation to NGO ${ngoId}`,
-        }],
-        application_context: {
-          return_url: `${process.env.NEXT_PUBLIC_BASE_URL}/api/donations/capture`,
-          cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/ngo/${ngoId}/donate`,
+      // Create Razorpay order
+      const options = {
+        amount: Math.round(amount * 100), // Razorpay expects amount in paise
+        currency: "INR",
+        receipt: `receipt_${Date.now()}`,
+        notes: {
+          ngoId: ngoId,
+          donorId: decoded.id,
+          campaignId: campaignId || "",
         },
-      });
+      };
 
-      const order = await executePaypalRequest(request);
+      const order = await razorpay.orders.create(options);
 
+      // Create pending donation record
       const donation = await Donation.create({
         donorId: decoded.id,
         ngoId,
+        campaignId: campaignId || null,
         amount,
         message,
-        paymentMethod,
+        paymentMethod: "Razorpay",
         paymentStatus: "Pending",
-        transactionId: order.result.id,
+        transactionId: order.id, // Razorpay order ID
       });
 
       await Donor.findByIdAndUpdate(decoded.id, {
         $push: { donations: donation._id },
       });
 
-      const approvalUrl = order.result.links.find(link => link.rel === "approve").href;
       return NextResponse.json({
-        message: "PayPal payment initiated",
+        message: "Razorpay order created",
         donation,
-        approvalUrl,
+        orderId: order.id,
+        amount: order.amount,
+        currency: order.currency,
+        keyId: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
       }, { status: 201 });
-    } else if (paymentMethod === "UPI" || paymentMethod === "Bank Transfer") {
+
+    } else if (paymentMethod === "UPI" || paymentMethod === "Bank Transfer" || paymentMethod === "Bank") {
+      // UPI / Bank Transfer flow (unchanged)
       const donation = await Donation.create({
         donorId: decoded.id,
         ngoId,
+        campaignId: campaignId || null,
         amount,
         message,
         paymentMethod,
-        paymentStatus: autoComplete ? "Completed" : "Pending", // Default to "Pending" unless autoComplete is true
+        paymentStatus: autoComplete ? "Completed" : "Pending",
       });
 
       await Donor.findByIdAndUpdate(decoded.id, {
@@ -128,11 +112,18 @@ export async function POST(req) {
       });
 
       if (autoComplete) {
-        // Update NGO stats if donation is marked as completed
         await NGO.findByIdAndUpdate(ngoId, {
           $inc: { totalDonations: amount, donationCount: 1 },
           $set: { lastDonationDate: new Date() },
         });
+
+        // Update campaign raised amount if campaignId is provided
+        if (campaignId) {
+          await NGO.findOneAndUpdate(
+            { _id: ngoId, "campaigns._id": campaignId },
+            { $inc: { "campaigns.$.raisedAmount": amount } }
+          );
+        }
       }
 
       return NextResponse.json({
@@ -141,6 +132,7 @@ export async function POST(req) {
           : `${paymentMethod} donation initiated. Please complete the payment manually.`,
         donation,
       }, { status: 201 });
+
     } else {
       return NextResponse.json({ error: "Unsupported payment method" }, { status: 400 });
     }
@@ -154,47 +146,6 @@ export async function POST(req) {
 }
 
 export async function GET(req) {
-  const url = new URL(req.url);
-  if (url.pathname.endsWith("/capture")) {
-    try {
-      const token = url.searchParams.get("token");
-      if (!token) {
-        return NextResponse.json({ error: "No payment token provided" }, { status: 400 });
-      }
-
-      const request = new paypal.orders.OrdersCaptureRequest(token);
-      const capture = await executePaypalRequest(request);
-
-      const donation = await Donation.findOneAndUpdate(
-        { transactionId: token },
-        {
-          paymentStatus: capture.result.status === "COMPLETED" ? "Completed" : "Failed",
-          transactionId: capture.result.id,
-        },
-        { new: true }
-      );
-
-      if (!donation) {
-        return NextResponse.json({ error: "Donation not found" }, { status: 404 });
-      }
-
-      if (capture.result.status === "COMPLETED") {
-        await NGO.findByIdAndUpdate(donation.ngoId, {
-          $inc: { totalDonations: donation.amount, donationCount: 1 },
-          $set: { lastDonationDate: new Date() },
-        });
-      }
-
-      return NextResponse.redirect(`${process.env.NEXT_PUBLIC_BASE_URL}/donate/success?donationId=${donation._id}`);
-    } catch (error) {
-      console.error("Error capturing PayPal payment:", error);
-      return NextResponse.json(
-        { error: "Failed to capture payment", details: error.message },
-        { status: 500 }
-      );
-    }
-  }
-
   try {
     await dbConnect();
     const token = req.cookies.get("token")?.value;
@@ -234,9 +185,9 @@ export async function PATCH(req) {
       return NextResponse.json({ error: "Invalid token" }, { status: 401 });
     }
 
-    // Assuming only admins can verify donations (adjust role as needed)
-    if (decoded.role !== "admin") {
-      return NextResponse.json({ error: "Forbidden: Admin access required" }, { status: 403 });
+    // Allow NGOs to verify donations too (not just admin)
+    if (decoded.role !== "admin" && decoded.role !== "ngo") {
+      return NextResponse.json({ error: "Forbidden: Admin or NGO access required" }, { status: 403 });
     }
 
     const body = await req.json();
@@ -266,6 +217,14 @@ export async function PATCH(req) {
         $inc: { totalDonations: donation.amount, donationCount: 1 },
         $set: { lastDonationDate: new Date() },
       });
+
+      // Update campaign raised amount if campaignId exists
+      if (donation.campaignId) {
+        await NGO.findOneAndUpdate(
+          { _id: donation.ngoId, "campaigns._id": donation.campaignId },
+          { $inc: { "campaigns.$.raisedAmount": donation.amount } }
+        );
+      }
     }
 
     return NextResponse.json({

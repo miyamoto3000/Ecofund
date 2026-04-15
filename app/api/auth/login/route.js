@@ -38,7 +38,7 @@ export async function POST(req) {
     const response = NextResponse.json({ message: "Login successful" }, { status: 200 });
     response.headers.append(
       "Set-Cookie",
-      `token=${token}; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=86400`
+      `token=${token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=86400`
     ); // 1 day in seconds
 
     return response;

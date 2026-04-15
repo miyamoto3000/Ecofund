@@ -1,46 +1,55 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import QRCode from "qrcode";
 
 export default function DonatePage() {
   const { id } = useParams();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const campaignId = searchParams.get("campaign");
+
   const [ngo, setNgo] = useState(null);
   const [amount, setAmount] = useState("");
   const [message, setMessage] = useState("");
-  const [paymentType, setPaymentType] = useState("PayPal");
+  const [paymentType, setPaymentType] = useState("Razorpay");
   const [paymentMethod, setPaymentMethod] = useState("UPI");
   const [qrCodeUrl, setQrCodeUrl] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
-  const [autoComplete, setAutoComplete] = useState(false);
+  const [donationLoading, setDonationLoading] = useState(false);
+  const [autoComplete, setAutoComplete] = useState(true);
+  const [successMessage, setSuccessMessage] = useState("");
+  const [donor, setDonor] = useState(null);
 
   useEffect(() => {
-    async function fetchNgo() {
+    async function fetchData() {
       try {
-        console.log("Fetching NGO with ID:", id);
         const res = await fetch(`/api/public/ngo/${id}`, {
           method: "GET",
           credentials: "include",
         });
         const data = await res.json();
-        console.log("NGO fetch response:", JSON.stringify(data, null, 2)); // Detailed response log
         if (res.ok) {
           setNgo(data.ngo);
-          console.log("NGO data set:", JSON.stringify(data.ngo, null, 2)); // Detailed NGO data log
         } else {
           setError(data.error || "Failed to fetch NGO details");
         }
+
+        // Try to fetch donor info for prefill
+        const donorRes = await fetch("/api/donors", { credentials: "include" });
+        if (donorRes.ok) {
+          const donorData = await donorRes.json();
+          setDonor(donorData.donor);
+        }
       } catch (err) {
-        console.error("Error fetching NGO:", err);
         setError(err.message || "Network error while fetching NGO");
       } finally {
         setLoading(false);
       }
     }
-    fetchNgo();
+    fetchData();
   }, [id]);
 
   useEffect(() => {
@@ -48,28 +57,28 @@ export default function DonatePage() {
       const upiUrl = `upi://pay?pa=${ngo.upiId}&pn=${encodeURIComponent(ngo.name)}&am=${amount}&cu=INR`;
       QRCode.toDataURL(upiUrl, { width: 200 }, (err, url) => {
         if (err) {
-          console.error("QR Code generation error:", err);
           setError("Failed to generate UPI QR code");
         } else {
           setQrCodeUrl(url);
-          console.log("QR Code URL generated:", url);
         }
       });
     } else {
       setQrCodeUrl("");
-      console.log("QR code not generated: ", { paymentType, paymentMethod, upiId: ngo?.upiId, amount });
     }
   }, [paymentType, paymentMethod, ngo, amount]);
 
-  const handlePaypalDonate = async () => {
+  const handleRazorpayDonate = async () => {
     if (!amount || parseInt(amount) <= 0) {
       setError("Please enter a valid amount greater than 0");
       return;
     }
 
     try {
-      setLoading(true);
+      setDonationLoading(true);
       setError("");
+      setSuccessMessage("");
+
+      // Step 1: Create Razorpay order
       const res = await fetch("/api/donations", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -78,20 +87,75 @@ export default function DonatePage() {
           ngoId: id,
           amount: parseInt(amount),
           message,
-          paymentMethod: "PayPal",
+          paymentMethod: "Razorpay",
+          campaignId: campaignId || null,
         }),
       });
 
       const data = await res.json();
-      if (res.ok && data.approvalUrl) {
-        window.location.href = data.approvalUrl;
-      } else {
-        setError(data.error || data.details || "Failed to initiate PayPal donation");
+
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to create donation order");
       }
+
+      // Step 2: Open Razorpay checkout
+      const options = {
+        key: data.keyId,
+        amount: data.amount,
+        currency: data.currency,
+        name: "Ecofund",
+        description: `Donation to ${ngo.name}`,
+        order_id: data.orderId,
+        handler: async function (response) {
+          // Step 3: Verify payment
+          try {
+            const verifyRes = await fetch("/api/donations/verify", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              credentials: "include",
+              body: JSON.stringify({
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+              }),
+            });
+
+            const verifyData = await verifyRes.json();
+
+            if (verifyRes.ok && verifyData.verified) {
+              setSuccessMessage("🎉 Payment successful! Thank you for your donation!");
+            } else {
+              setError(verifyData.error || "Payment verification failed");
+            }
+          } catch (err) {
+            setError("Payment verification error: " + err.message);
+          }
+          setDonationLoading(false);
+        },
+        modal: {
+          ondismiss: function () {
+            setDonationLoading(false);
+          },
+        },
+        prefill: {
+          name: donor?.name || "",
+          email: donor?.email || "",
+          contact: donor?.contactNumber || "",
+        },
+        theme: {
+          color: "#4f46e5",
+        },
+      };
+
+      const rzp = new window.Razorpay(options);
+      rzp.on("payment.failed", function (response) {
+        setDonationLoading(false);
+        setError(`Payment failed: ${response.error.description}`);
+      });
+      rzp.open();
     } catch (err) {
-      setError(err.message || "Network error occurred during PayPal donation");
-    } finally {
-      setLoading(false);
+      setError(err.message || "Error processing donation");
+      setDonationLoading(false);
     }
   };
 
@@ -100,51 +164,65 @@ export default function DonatePage() {
       setError("Please enter a valid amount greater than 0");
       return;
     }
-  
+
     try {
-      setLoading(true);
+      setDonationLoading(true);
       setError("");
+      setSuccessMessage("");
+
       const res = await fetch("/api/donations", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        credentials: "include", // Ensure cookies are sent
-      body: JSON.stringify({
-        ngoId: id,
-        amount: parseInt(amount),
-        message,
-        paymentMethod,
-        autoComplete,
-      }),
-    });
-  
+        credentials: "include",
+        body: JSON.stringify({
+          ngoId: id,
+          amount: parseInt(amount),
+          message,
+          paymentMethod,
+          autoComplete,
+          campaignId: campaignId || null,
+        }),
+      });
+
       const data = await res.json();
-      console.log("Donation response:", data); // Debug: Log API response
       if (res.ok) {
-        const msg = autoComplete
-          ? "Donation recorded as successful."
-          : "Please complete the payment using the provided details.";
-        alert(msg);
-        router.push(`/donate/success?donationId=${data.donation._id}`);
+        setSuccessMessage(
+          autoComplete
+            ? "Donation recorded as successful!"
+            : "Donation initiated. Please complete the payment using the provided details."
+        );
       } else {
-        setError(data.error || data.details || "Failed to initiate manual donation");
+        setError(data.error || "Failed to initiate donation");
       }
     } catch (err) {
-      setError(err.message || "Network error occurred during manual donation");
+      setError(err.message || "Network error");
     } finally {
-      setLoading(false);
+      setDonationLoading(false);
     }
   };
 
   if (loading) {
-    return <div className="text-center py-10"><p className="text-gray-600 animate-pulse text-lg">Loading...</p></div>;
+    return (
+      <div className="text-center py-10">
+        <p className="text-gray-600 animate-pulse text-lg">Loading...</p>
+      </div>
+    );
   }
 
   if (error && !ngo) {
-    return <div className="text-center py-10"><p className="text-red-600 text-lg">{error}</p></div>;
+    return (
+      <div className="text-center py-10">
+        <p className="text-red-600 text-lg">{error}</p>
+      </div>
+    );
   }
 
   if (!ngo) {
-    return <div className="text-center py-10"><p className="text-gray-600 text-lg">NGO not found</p></div>;
+    return (
+      <div className="text-center py-10">
+        <p className="text-gray-600 text-lg">NGO not found</p>
+      </div>
+    );
   }
 
   return (
@@ -154,7 +232,10 @@ export default function DonatePage() {
       transition={{ duration: 0.5 }}
       className="max-w-md mx-auto p-6 bg-white rounded-2xl shadow-lg mt-8"
     >
-      <h1 className="text-2xl font-bold text-indigo-900 mb-6 text-center">Donate to {ngo.name}</h1>
+      <h1 className="text-2xl font-bold text-indigo-900 mb-6 text-center">
+        Donate to {ngo.name}
+      </h1>
+
       <div className="space-y-6">
         <div>
           <label className="block text-gray-700 font-medium mb-1">Payment Type</label>
@@ -162,9 +243,9 @@ export default function DonatePage() {
             value={paymentType}
             onChange={(e) => setPaymentType(e.target.value)}
             className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-800"
-            disabled={loading}
+            disabled={donationLoading}
           >
-            <option value="PayPal">PayPal Sandbox</option>
+            <option value="Razorpay">Razorpay (Card / UPI / NetBanking)</option>
             <option value="Manual">Manual (Local Payments)</option>
           </select>
         </div>
@@ -179,7 +260,7 @@ export default function DonatePage() {
             className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-800"
             required
             min="1"
-            disabled={loading}
+            disabled={donationLoading}
           />
         </div>
 
@@ -191,7 +272,7 @@ export default function DonatePage() {
             onChange={(e) => setMessage(e.target.value)}
             placeholder="Add a message"
             className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-800"
-            disabled={loading}
+            disabled={donationLoading}
           />
         </div>
 
@@ -203,10 +284,10 @@ export default function DonatePage() {
                 value={paymentMethod}
                 onChange={(e) => setPaymentMethod(e.target.value)}
                 className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-800"
-                disabled={loading}
+                disabled={donationLoading}
               >
                 <option value="UPI">UPI</option>
-                <option value="Bank Transfer">Bank Transfer</option>
+                <option value="Bank">Bank Transfer</option>
               </select>
             </div>
 
@@ -214,15 +295,15 @@ export default function DonatePage() {
               <div className="text-center">
                 {ngo.upiId ? (
                   <>
-                    <p className="text-gray-700 mb-2">Scan the QR code or use: {ngo.upiId}</p>
+                    <p className="text-gray-700 mb-2">
+                      Scan the QR code or use: {ngo.upiId}
+                    </p>
                     {qrCodeUrl ? (
                       <img src={qrCodeUrl} alt="UPI QR Code" className="mx-auto w-48 h-48" />
+                    ) : amount ? (
+                      <p className="text-gray-500">Generating QR code...</p>
                     ) : (
-                      amount ? (
-                        <p className="text-gray-500">Generating QR code...</p>
-                      ) : (
-                        <p className="text-gray-500">Enter amount to see QR code</p>
-                      )
+                      <p className="text-gray-500">Enter amount to see QR code</p>
                     )}
                   </>
                 ) : (
@@ -231,7 +312,7 @@ export default function DonatePage() {
               </div>
             )}
 
-            {paymentMethod === "Bank Transfer" && (
+            {paymentMethod === "Bank" && (
               <div className="text-gray-700 space-y-2">
                 {ngo.bankDetails && Object.keys(ngo.bankDetails).length > 0 ? (
                   <>
@@ -265,7 +346,7 @@ export default function DonatePage() {
                 checked={autoComplete}
                 onChange={(e) => setAutoComplete(e.target.checked)}
                 className="mr-2"
-                disabled={loading}
+                disabled={donationLoading}
               />
               <label className="text-gray-700 text-sm">
                 Mark as completed immediately (for testing)
@@ -275,22 +356,27 @@ export default function DonatePage() {
         )}
 
         {error && <p className="text-red-600 text-sm bg-red-100 p-2 rounded">{error}</p>}
+        {successMessage && (
+          <p className="text-green-600 text-sm bg-green-100 p-2 rounded">{successMessage}</p>
+        )}
 
         <button
-          onClick={paymentType === "PayPal" ? handlePaypalDonate : handleManualDonate}
-          disabled={loading}
+          onClick={paymentType === "Razorpay" ? handleRazorpayDonate : handleManualDonate}
+          disabled={donationLoading}
           className={`w-full py-2 rounded-lg text-white font-medium ${
-            loading ? "bg-gray-400 cursor-not-allowed" : "bg-indigo-600 hover:bg-indigo-700"
+            donationLoading
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-indigo-600 hover:bg-indigo-700"
           } transition-colors`}
         >
-          {loading
+          {donationLoading
             ? "Processing..."
-            : `Donate Now (${paymentType === "PayPal" ? "PayPal Sandbox" : paymentMethod})`}
+            : `Donate ₹${amount || "0"} (${paymentType === "Razorpay" ? "Razorpay" : paymentMethod})`}
         </button>
 
-        {paymentType === "PayPal" && (
+        {paymentType === "Razorpay" && (
           <p className="text-gray-500 text-sm text-center mt-4">
-            Using PayPal Sandbox. Log in with your sandbox buyer account.
+            Razorpay Test Mode — Use test card: 4111 1111 1111 1111
           </p>
         )}
       </div>

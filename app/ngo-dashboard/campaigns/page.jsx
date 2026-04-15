@@ -319,6 +319,4 @@ export default function NgoDashboard() {
     </div>
   );
 }
-
-const getProgress = (raisedAmount, targetAmount) =>
-  targetAmount > 0 ? (raisedAmount / targetAmount) * 100 : 0;
+
